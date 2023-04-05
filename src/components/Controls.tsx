@@ -12,8 +12,6 @@ function Controls(props:
       var monsterHP = props.monster;
       var currentRound = props.round;
       
-      
-  
     function attackPlayer(){
       const hit = randomTall(15, 8);
       if(playerHP - hit < 0){
@@ -49,7 +47,7 @@ function Controls(props:
     }
   
     function healPlayer(){
-      const heal = randomTall(20, 5);
+      const heal = randomTall(20, 10);
       const hit = randomTall(15, 8);
       if(playerHP + (heal - hit) > 100){
         props.playerHealth(100);
