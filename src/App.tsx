@@ -6,9 +6,9 @@ import Log from "./components/Log";
 import { useState } from "react";
 
 interface BattleLog {
-  actionBy: string,
-  actionType: string,
-  actionValue: number
+  actionBy: string;
+  actionType: string;
+  actionValue: number;
 }
 
 function App() {
@@ -38,15 +38,15 @@ function App() {
   const SetDeathStateInChild = (deathState: Boolean) => {
     setDeathState(deathState);
   };
-  const SetBattleLogInChild = (log:Array<BattleLog>) => {
-    SetBattleLog(log)
-  }
+  const SetBattleLogInChild = (log: Array<BattleLog>) => {
+    SetBattleLog(log);
+  };
 
-  function log(who:string, what:string, value:number){
+  function log(who: string, what: string, value: number) {
     battleLog.unshift({
       actionBy: who,
       actionType: what,
-      actionValue: value
+      actionValue: value,
     });
   }
 
@@ -60,7 +60,8 @@ function App() {
         <h1>Monster Slayer</h1>
       </div>
       {gameState === false ? (
-        <GameOver
+        <div>
+          <GameOver
           player={playerHealth}
           monster={monsterHealth}
           state={gameState}
@@ -70,25 +71,29 @@ function App() {
           roundCount={SetTurnInChild}
           gameState={SetGameStateInChild}
           deathState={SetDeathStateInChild}
+          battleLog={SetBattleLogInChild}
         />
+        <Health player={playerHealth} monster={monsterHealth} />
+        <Log log={battleLog} />
+        </div>
       ) : (
         <div>
-          <Health player={playerHealth} monster={monsterHealth} />
-          <Controls
-            player={playerHealth}
-            monster={monsterHealth}
-            round={turn}
-            playerHealth={SetPlayerHealthInChild}
-            monsterHealth={SetMonsterHealthInChild}
-            roundCount={SetTurnInChild}
-            gameState={SetGameStateInChild}
-            deathState={SetDeathStateInChild}
-          />
-          <Log 
-            log = {battleLog}
-          />
+        <Health player={playerHealth} monster={monsterHealth} />
+        <Controls
+          player={playerHealth}
+          monster={monsterHealth}
+          round={turn}
+          playerHealth={SetPlayerHealthInChild}
+          monsterHealth={SetMonsterHealthInChild}
+          roundCount={SetTurnInChild}
+          gameState={SetGameStateInChild}
+          deathState={SetDeathStateInChild}
+          battleLog={log}
+        />
+        <Log log={battleLog} />
         </div>
       )}
+      
     </div>
   );
 }
