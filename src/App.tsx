@@ -5,70 +5,90 @@ import GameOver from "./components/GameOver";
 import Log from "./components/Log";
 import { useState } from "react";
 
+interface BattleLog {
+  actionBy: string,
+  actionType: string,
+  actionValue: number
+}
+
 function App() {
-  const [gameSession, setGameSession] = useState<Boolean>(false);
+  const [gameState, setGameState] = useState<Boolean>(false);
   const [playerHealth, setPlayerHealth] = useState<number>(100);
   const [monsterHealth, setMonsterHealth] = useState<number>(100);
-  const [death, setDeath] = useState<Boolean>(false);
+  const [deathState, setDeathState] = useState<Boolean>(false);
   const [turn, setTurn] = useState<number>(0);
+  const [battleLog, SetBattleLog] = useState<Array<BattleLog>>([]);
 
-  const SetHealthPlayer = (healthPlayer: number) => {
-	setPlayerHealth(healthPlayer);
+  const SetPlayerHealthInChild = (healthPlayer: number) => {
+    setPlayerHealth(healthPlayer);
   };
 
-  const SetHealthMonster = (healthMonster: number) => {
+  const SetMonsterHealthInChild = (healthMonster: number) => {
     setMonsterHealth(healthMonster);
   };
 
-  const SetCurrentRound = (round: number) => {
+  const SetTurnInChild = (round: number) => {
     setTurn(round);
   };
 
-  const SetGameState = (gameState: Boolean) => {
-    setGameSession(gameState);
+  const SetGameStateInChild = (gameState: Boolean) => {
+    setGameState(gameState);
   };
 
-  const SetDeathState = (deathState: Boolean) => {
-	setDeath(deathState);
+  const SetDeathStateInChild = (deathState: Boolean) => {
+    setDeathState(deathState);
+  };
+  const SetBattleLogInChild = (log:Array<BattleLog>) => {
+    SetBattleLog(log)
   }
-  if((playerHealth === 0 || monsterHealth === 0) && death === false ){
-	setDeath(true);
-	setGameSession(false);
+
+  function log(who:string, what:string, value:number){
+    battleLog.unshift({
+      actionBy: who,
+      actionType: what,
+      actionValue: value
+    });
   }
-  console.log("Not dead " + turn + " " + playerHealth + " " + monsterHealth);
+
+  if ((playerHealth === 0 || monsterHealth === 0) && deathState === false) {
+    setDeathState(true);
+    setGameState(false);
+  }
   return (
     <div className="App">
-		<div className="header">
-        	<h1>Monster Slayer</h1>
-    	</div>
-      { gameSession === false ?
-		<GameOver
-		player={playerHealth}
-		monster={monsterHealth}
-		state={gameSession}
-		death={death}
-		playerHealth={SetHealthPlayer}
-		monsterHealth={SetHealthMonster}
-		roundCount={SetCurrentRound}
-		gameState={SetGameState}
-		deathState = {SetDeathState}
-	  />
-	:
-	<div>
-  <Health player={playerHealth} monster={monsterHealth} />
-	<Controls
-	player={playerHealth}
-	monster={monsterHealth}
-	round={turn}
-	playerHealth={SetHealthPlayer}
-	monsterHealth={SetHealthMonster}
-	roundCount={SetCurrentRound}
-	gameState={SetGameState}
-	deathState = {SetDeathState}
-  />
-  <Log />
-  </div>
-  }
+      <div className="header">
+        <h1>Monster Slayer</h1>
+      </div>
+      {gameState === false ? (
+        <GameOver
+          player={playerHealth}
+          monster={monsterHealth}
+          state={gameState}
+          death={deathState}
+          playerHealth={SetPlayerHealthInChild}
+          monsterHealth={SetMonsterHealthInChild}
+          roundCount={SetTurnInChild}
+          gameState={SetGameStateInChild}
+          deathState={SetDeathStateInChild}
+        />
+      ) : (
+        <div>
+          <Health player={playerHealth} monster={monsterHealth} />
+          <Controls
+            player={playerHealth}
+            monster={monsterHealth}
+            round={turn}
+            playerHealth={SetPlayerHealthInChild}
+            monsterHealth={SetMonsterHealthInChild}
+            roundCount={SetTurnInChild}
+            gameState={SetGameStateInChild}
+            deathState={SetDeathStateInChild}
+          />
+          <Log 
+            log = {battleLog}
+          />
+        </div>
+      )}
     </div>
   );
 }
