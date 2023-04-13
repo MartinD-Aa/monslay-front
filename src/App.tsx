@@ -17,7 +17,7 @@ function App() {
   const [monsterHealth, setMonsterHealth] = useState<number>(100);
   const [deathState, setDeathState] = useState<Boolean>(false);
   const [turn, setTurn] = useState<number>(0);
-  const [battleLog, SetBattleLog] = useState<Array<BattleLog>>([]);
+  const [battleLog, setBattleLog] = useState<Array<BattleLog>>([]);
 
   const SetPlayerHealthInChild = (healthPlayer: number) => {
     setPlayerHealth(healthPlayer);
@@ -39,7 +39,7 @@ function App() {
     setDeathState(deathState);
   };
   const SetBattleLogInChild = (log: Array<BattleLog>) => {
-    SetBattleLog(log);
+    setBattleLog(log);
   };
 
   function log(who: string, what: string, value: number) {
@@ -48,6 +48,14 @@ function App() {
       actionType: what,
       actionValue: value,
     });
+  }
+  function initializeGame(){
+    setPlayerHealth(100);
+    setMonsterHealth(100);
+    setTurn(0);
+    setGameState(true);
+    setDeathState(false);
+    setBattleLog([]);
   }
 
   if ((playerHealth === 0 || monsterHealth === 0) && deathState === false) {
@@ -66,12 +74,7 @@ function App() {
           monster={monsterHealth}
           state={gameState}
           death={deathState}
-          playerHealth={SetPlayerHealthInChild}
-          monsterHealth={SetMonsterHealthInChild}
-          roundCount={SetTurnInChild}
-          gameState={SetGameStateInChild}
-          deathState={SetDeathStateInChild}
-          battleLog={SetBattleLogInChild}
+          resetGame={initializeGame}
         />
         <Health player={playerHealth} monster={monsterHealth} />
         <Log log={battleLog} />
