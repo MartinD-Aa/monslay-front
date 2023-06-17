@@ -3,21 +3,10 @@ function GameOver(props: {
   monster: number;
   state: Boolean;
   death: Boolean;
-  playerHealth: Function;
-  monsterHealth: Function;
-  roundCount: Function;
-  gameState: Function;
-  deathState: Function;
-  battleLog: Function;
+  resetGame: Function;
+  
 }) {
-  function resetGame() {
-    props.playerHealth(100);
-    props.monsterHealth(100);
-    props.roundCount(0);
-    props.gameState(true);
-    props.deathState(false);
-    props.battleLog([]);
-  }
+  
 
   return (
     <section className="container">
@@ -42,7 +31,7 @@ function GameOver(props: {
       ) : (
         <p></p>
       )}
-      <button onClick={resetGame}>Start New Game</button>
+      <button onClick={() => props.resetGame()}>Start New Game</button>
     </section>
   );
 }
